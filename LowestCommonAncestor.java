@@ -45,6 +45,29 @@ public class LowestCommonAncestor{
 		}
 	}
 	
+	public void addChild(Node parent, Node child)
+	{
+		if(parent.children[0]==null)
+		{
+			parent.children[0]=child;
+		}
+		else
+		{
+			parent.children = Arrays.copyOf(parent.children, parent.children.length+1);
+			parent.children[parent.children.length-1] = child;
+		}
+		
+		if(child.ancestors[0]==null) 
+		{
+			child.ancestors[0]=parent;
+		}
+		else
+		{
+			child.ancestors = Arrays.copyOf(child.ancestors, child.ancestors.length+1);
+			child.ancestors[child.ancestors.length-1] = parent;
+		}
+	}
+	
 	public Node lca(Node root, int desc1, int desc2)
 	{
 		if(root==null)
