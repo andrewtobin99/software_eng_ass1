@@ -52,23 +52,33 @@ public class LowestCommonAncestor{
 	
 	public Node lcaDAG(Node root, int desc1, int desc2)
 	{
+		int deepestAncestorDepth = -1;
+		Node deepestAncestor = null;
 		if (root == null)
+		{
 			return null;
+		}
 		else if(root.children==null) 
+		{
 			return null;
+		}
 		
 		Node desc1N = findNode(root, desc1);
 		Node desc2N = findNode(root, desc2);
 		
 		if(desc1N == null || desc2N == null)
+		{
 			return null;
-		
+		}
 		if(desc1N==desc2N)
+		{
 			return desc1N;
-		
-		else {
-				int deepestAncestorDepth = -1;
-				Node deepestAncestor = null;
+		}
+		if(desc1N==root || desc2N==root)
+		{
+			return root;
+		}
+		else{
 				for(int i=0; i<desc1N.parents.length; i++)
 				{
 					for(int j=0; j<desc2N.parents.length; j++)
@@ -80,9 +90,7 @@ public class LowestCommonAncestor{
 								deepestAncestorDepth = deepestAncestor.maxDepth;
 						}
 					}
-
 				}
-				
 				for(int i=0; i<desc2N.parents.length; i++)
 				{
 					if(desc2N.parents[i] == desc1N)
@@ -92,7 +100,6 @@ public class LowestCommonAncestor{
 							deepestAncestorDepth = deepestAncestor.maxDepth;
 					}
 				}
-				
 				for(int i=0; i<desc2N.parents.length; i++)
 				{
 					if(desc1N==desc2N.parents[i])
@@ -112,8 +119,14 @@ public class LowestCommonAncestor{
 							deepestAncestorDepth = deepestAncestor.maxDepth;
 					}
 				}
-				return deepestAncestor;
+				if(deepestAncestor!=null)
+					return deepestAncestor;
 		}
+		deepestAncestor = lcaDAG(root, desc1N.parents[0].data, desc2N.parents[0].data);
+		if(deepestAncestor!=null)
+			return deepestAncestor;
+		else
+			return null;
 	}
 	
 	public Node findNode(Node root, int value)

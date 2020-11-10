@@ -64,6 +64,6 @@ public class LowestCommonAncestorTests{
 		lca.addChild(n5, n8);
 		lca.addChild(n6, n8);
 		assertEquals(lca.lcaDAG(root, 7,8).data, 4);
-		
+		assertEquals(lca.lcaDAG(root, 2,8).data, 1);
 	}
 }
