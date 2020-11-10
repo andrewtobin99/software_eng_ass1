@@ -1,56 +1,34 @@
-import java.util.*;
+import java.util.Arrays;
 public class LowestCommonAncestor{
 	
 	 public Node root;
 	
-	public void addChild(Node parent, Node child)
-	{
-		if(parent.children[0]==null)
+	 public void addChild(Node parent, Node child)
 		{
-			parent.children[0]=child;	
+			if(parent.children[0]==null)
+			{
+				parent.children[0]=child;	
+			}
+			else
+			{
+				parent.children = Arrays.copyOf(parent.children, parent.children.length+1);
+				parent.children[parent.children.length-1] = child;
+			}
+			
+			if(child.parents[0]==null) 
+			{
+				child.parents[0]=parent;
+			}
+			else
+			{
+				child.parents = Arrays.copyOf(child.parents, child.parents.length+1);
+				child.parents[child.parents.length-1] = parent;
+			}
+			if(child.maxDepth < parent.maxDepth +1)
+				child.maxDepth = parent.maxDepth + 1;
 		}
-		else
-		{
-			parent.children = Arrays.copyOf(parent.children, parent.children.length+1);
-			parent.children[parent.children.length-1] = child;
-		}
-		
-		if(child.parents[0]==null) 
-		{
-			child.parents[0]=parent;
-		}
-		else
-		{
-			child.parents = Arrays.copyOf(child.parents, child.parents.length+1);
-			child.parents[child.parents.length-1] = parent;
-		}
-		if(child.maxDepth < parent.maxDepth +1)
-			child.maxDepth = parent.maxDepth + 1;
-	}
 	
- 
-	/* public Node lca(Node root, int desc1, int desc2)
-	{
-		if(root==null)
-			return null;
-	 
-	    if(root.data==desc1 || root.data==desc2)
-	        return root;
-	 
-	    Node l = lca(root.left, desc1, desc2);
-	    Node r = lca(root.right, desc1, desc2);
-	 
-	    if(l!=null&&r!=null){
-	        return root;
-	    }else if(l==null&&r==null){
-	        return null;
-	    }else{
-	        return l==null?r:l;
-	    }
-	} */
-
-	
-	public Node lcaDAG(Node root, int desc1, int desc2)
+	public Node lca(Node root, int desc1, int desc2)
 	{
 		int deepestAncestorDepth = -1;
 		Node deepestAncestor = null;
@@ -122,12 +100,15 @@ public class LowestCommonAncestor{
 				if(deepestAncestor!=null)
 					return deepestAncestor;
 		}
-		deepestAncestor = lcaDAG(root, desc1N.parents[0].data, desc2N.parents[0].data);
+		deepestAncestor = lca(root, desc1N.parents[0].data, desc2N.parents[0].data);
 		if(deepestAncestor!=null)
 			return deepestAncestor;
 		else
 			return null;
 	}
+	
+	//currently can't return correct LCA if node X is an ancestor of node Y
+	//but is not a parent of node Y, returns root value instead.
 	
 	public Node findNode(Node root, int value)
 	{
@@ -163,6 +144,28 @@ public class LowestCommonAncestor{
 		}
 		return null;
 	}
+	
+	// nodes from original LCA that are obsolete now but could be used again 
+	
+	/* public Node lca(Node root, int desc1, int desc2)
+	{
+		if(root==null)
+			return null;
+	 
+	    if(root.data==desc1 || root.data==desc2)
+	        return root;
+	 
+	    Node l = lca(root.left, desc1, desc2);
+	    Node r = lca(root.right, desc1, desc2);
+	 
+	    if(l!=null&&r!=null){
+	        return root;
+	    }else if(l==null&&r==null){
+	        return null;
+	    }else{
+	        return l==null?r:l;
+	    }
+	} */
 	
 	/*public Node getNodeValue(int value)
 	{
